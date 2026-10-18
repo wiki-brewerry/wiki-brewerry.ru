@@ -12,7 +12,23 @@
   «ВЕРСИЯ САЙТА» выше и добавь строку в историю ниже.
 
   ИСТОРИЯ ВЕРСИЙ:
-  1.0 — первый релиз:
+  1.0 — ДОЛГОЖДАННЫЙ РЕЛИЗ! Brewerry Wiki — полная база знаний сервера Slarof
+        по системе варки Brewerry, в пиксельном стиле Minecraft:
+        • Обучение: «Добро пожаловать», варка и смешивание (котёл, ингредиенты,
+          время), дистиллирование, бочки (постройка, породы, материалы, выдержка),
+          запечатывание и брендирование
+        • Рецепты по 9 категориям (фруктовые, крепкие и огненные, водка, травяные
+          и грибные, домашние и зерновые, классические, дистилляты, коктейли,
+          безалкогольные) + раздел «Еда»: ингредиенты с иконками, время варки,
+          дистилляции, выдержка, крепость и эффекты
+        • Поиск по напитку и ингредиенту, фильтры (крепость, время, бочка, эффект),
+          сортировка по любому столбцу, «Случайный рецепт» как слот-машина
+        • Калькулятор варки в отдельном окне: список напитков с поиском, карточки
+          ингредиентов, количество варок, быстрые значения, время и эффекты
+        • Избранное: звёздочки в таблице и вкладка «★ Избранное» в окне калькулятора
+        • Оформление: плавающие пиксельные частицы, MC-кнопки, пиксельный курсор,
+          плавные переходы и анимации, адаптив под телефон и планшет
+        Также в этом релизе:
         • плашка разработчика frein в сайдбаре: появляется с анимацией,
           когда страница долистана до конца (десктоп); справа — версия сайта
         • пасхалка: 5 кликов по плашке включают фиолетовую тему (волна от
@@ -780,6 +796,62 @@ body.navlock main{-webkit-user-select:none;user-select:none}
 .calc-meta{color:#a9a9b2;font-size:13px}
 .calc-meta b{color:#d5d5db;font-weight:600}
 
+/* ===== v1.0: калькулятор варки — отдельное окно ===== */
+.cm{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px}
+.cm[hidden]{display:none}
+.cm-bg{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);animation:cmF .15s ease}
+.cm-win{position:relative;width:min(920px,100%);height:min(640px,100%);display:flex;flex-direction:column;background:var(--bg-card);border:3px solid #000;box-shadow:inset 0 0 0 2px var(--border),0 12px 40px rgba(0,0,0,.7);animation:cmP .18s ease}
+@keyframes cmF{from{opacity:0}}
+@keyframes cmP{from{opacity:0;transform:translateY(12px) scale(.98)}}
+.cm-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:3px solid #000;background:#141417}
+.cm-head .mc-btn{padding:4px 12px}
+.cm-body{flex:1;min-height:0;display:flex}
+.cm-side{width:280px;flex:none;display:flex;flex-direction:column;border-right:3px solid #000;background:#17171b}
+.cm-tabs{display:flex}
+.cm-tabs button{flex:1;padding:10px 6px;font:400 10px var(--font-pixel);text-transform:uppercase;color:var(--muted);background:#141417;border:0;border-bottom:3px solid #000;cursor:pointer}
+.cm-tabs button.on{color:var(--amber);background:var(--bg-card);border-bottom-color:var(--green)}
+.cm-tabs span{color:var(--amber)}
+.cm-q{margin:10px;padding:8px 10px;font:500 14px var(--font-sans);color:var(--text);background:#0f0f12;border:2px solid var(--border2);border-radius:0;outline:none}
+.cm-q:focus{border-color:var(--green-dark)}
+.cm-list{flex:1;overflow-y:auto;padding:0 8px 10px}
+.cm-grp{margin:12px 4px 4px;font:400 9px var(--font-pixel);letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.cm-it{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px;color:var(--text);background:transparent;border:2px solid transparent;font:500 13.5px var(--font-sans);text-align:left;cursor:pointer}
+.cm-it img{width:24px;height:24px;image-rendering:pixelated;filter:drop-shadow(1px 1px #000)}
+.cm-it:hover{background:#22222a}
+.cm-it.on{background:#22301b;border-color:var(--green-dark)}
+.cm-nm{flex:1;min-width:0}
+.cm-st{color:var(--amber)}
+.cm-empty,.cm-hint{padding:16px 8px;color:var(--muted);font-size:13.5px}
+.cm-hint{display:none}
+.cm-main{flex:1;min-width:0;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.cm-main.none>*{display:none}
+.cm-main.none .cm-hint{display:block}
+.cm-hero{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.cm-big{width:48px;height:48px;image-rendering:pixelated;filter:drop-shadow(2px 2px #000)}
+.cm-name{flex:1;min-width:160px;font:800 22px var(--font-sans);line-height:1.2}
+.cm-fav{padding:7px 12px;font:400 10px var(--font-pixel);text-transform:uppercase;color:var(--muted);background:#141417;border:2px solid var(--border2);cursor:pointer}
+.cm-fav:hover{border-color:var(--amber)}
+.cm-fav.on{color:var(--amber);border-color:#8a6d12}
+.cm-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cm-chip{display:inline-flex;gap:6px;align-items:baseline;padding:4px 9px;font-size:13px;background:#141417;border:2px solid var(--border)}
+.cm-chip i{font:400 9px var(--font-pixel);font-style:normal;text-transform:uppercase;color:var(--muted)}
+.cm-fx{color:var(--emerald)}
+.cm-neg{color:#f87171}
+.cm-qty{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 14px;background:#141417;border:2px solid var(--border)}
+.cm-lbl{font:400 10px var(--font-pixel);text-transform:uppercase;color:var(--amber)}
+.cm .calc-n input{width:84px;padding:8px;font:700 16px var(--font-sans);color:var(--text);background:#0f0f12;border:2px solid var(--border2);text-align:center;outline:none;border-radius:0}
+.cm .calc-n input:focus{border-color:var(--green-dark)}
+.cm-pre{display:flex;gap:6px;flex-wrap:wrap}
+.cm-pre button{padding:6px 10px;font:700 12px var(--font-sans);color:var(--text);background:#22222a;border:2px solid var(--border2);cursor:pointer}
+.cm-pre button:hover{border-color:var(--green)}
+.cm-ings{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.cm-ing{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#141417;border:2px solid var(--border);border-left:4px solid var(--green-dark)}
+.cm-ing img{width:36px;height:36px;image-rendering:pixelated;filter:drop-shadow(1px 1px #000)}
+.cm-itx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.cm-itx small{color:var(--muted);font-size:12px}
+.cm-cnt{font:700 24px var(--font-sans);color:var(--amber);font-variant-numeric:tabular-nums}
+@media(max-width:760px){.cm{padding:0}.cm-win{height:100%;border-width:0}.cm-body{flex-direction:column}.cm-side{width:auto;max-height:38%;border-right:0;border-bottom:3px solid #000}.cm-main{padding:16px}}
+
 td.nm{position:relative;padding-right:66px}
 /* значки на строках — пиксельные спрайты 16×16, без рамок */
 .fav,.cbtn{position:absolute;top:8px;width:24px;height:24px;padding:0;border:0;cursor:pointer;
@@ -1252,23 +1324,40 @@ h2{text-shadow:1px 1px #2e1065}
           </div>
         </div>
 
-        <div class="calc" id="calc" hidden>
-          <div class="calc-head">
-            <span class="calc-title">Калькулятор варки</span>
-            <button class="mc-btn stone" id="calcClose" type="button" aria-label="Закрыть калькулятор">×</button>
+        <div class="cm" id="calc" hidden role="dialog" aria-modal="true" aria-labelledby="cmT">
+          <div class="cm-bg" id="cmBg"></div>
+          <div class="cm-win">
+            <div class="cm-head">
+              <span class="calc-title" id="cmT">Калькулятор варки</span>
+              <button class="mc-btn stone" id="calcClose" type="button" aria-label="Закрыть">×</button>
+            </div>
+            <div class="cm-body">
+              <div class="cm-side">
+                <div class="cm-tabs">
+                  <button type="button" id="cmAll" class="on">Все напитки</button>
+                  <button type="button" id="cmFav">★ Избранное <span id="cmFavN"></span></button>
+                </div>
+                <input type="text" class="cm-q" id="cmQ" placeholder="найти напиток…" autocomplete="off">
+                <div class="cm-list" id="cmList"></div>
+              </div>
+              <div class="cm-main none" id="cmMain">
+                <p class="cm-hint">Выберите напиток слева.</p>
+                <div class="cm-hero" id="cmHero"></div>
+                <div class="cm-chips" id="cMeta"></div>
+                <div class="cm-qty">
+                  <span class="cm-lbl">Сколько варок</span>
+                  <span class="calc-n">
+                    <button class="mc-btn stone" id="cMinus" type="button" aria-label="Меньше">−</button>
+                    <input type="number" id="cN" min="1" max="999" value="1" inputmode="numeric">
+                    <button class="mc-btn stone" id="cPlus" type="button" aria-label="Больше">+</button>
+                  </span>
+                  <span class="cm-pre" id="cmPre"><button type="button" data-n="1">1</button><button type="button" data-n="5">5</button><button type="button" data-n="10">10</button><button type="button" data-n="32">32</button><button type="button" data-n="64">64</button></span>
+                </div>
+                <div class="cm-ings" id="cOut"></div>
+                <div class="calc-total" id="cTot"></div>
+              </div>
+            </div>
           </div>
-          <div class="calc-in">
-            <label>Напиток <select id="cDrink"></select></label>
-            <label>Количество варок
-              <span class="calc-n">
-                <button class="mc-btn stone" id="cMinus" type="button" aria-label="Меньше">−</button>
-                <input type="number" id="cN" min="1" max="999" value="1" inputmode="numeric">
-                <button class="mc-btn stone" id="cPlus" type="button" aria-label="Больше">+</button>
-              </span>
-            </label>
-          </div>
-          <div class="calc-out" id="cOut"></div>
-          <div class="calc-meta" id="cMeta"></div>
         </div>
       </div>
 
@@ -2116,7 +2205,7 @@ stagger(); reveal();
     b.setAttribute('aria-label', on ? 'Убрать из избранного' : 'В избранное');
     b.title = on ? 'Убрать из избранного' : 'В избранное';
   }
-  function updFavN(){ $('favN').textContent = Object.keys(FAV).length; }
+  function updFavN(){ var n = Object.keys(FAV).length; $('favN').textContent = n; $('cmFavN').textContent = n ? n : ''; }
 
   /* --- заполняем списки --- */
   function fillSelect(sel, values){
@@ -2126,15 +2215,6 @@ stagger(); reveal();
   }
   fillSelect($('fWood'), Object.keys(woods).sort(function(a,b){ return a.localeCompare(b, 'ru'); }));
   fillSelect($('fFx'), Object.keys(fxs).sort(function(a,b){ return a.localeCompare(b, 'ru'); }));
-  var groups = {};
-  DRINKS.forEach(function(r){
-    var d = r._d, g = groups[d.cat];
-    if (!g) {
-      g = groups[d.cat] = document.createElement('optgroup');
-      var h = $(d.cat); g.label = h ? clean(h.textContent) : d.cat; $('cDrink').appendChild(g);
-    }
-    var o = document.createElement('option'); o.value = d.k; o.textContent = d.name; g.appendChild(o);
-  });
   updFavN();
 
   /* --- фильтры --- */
@@ -2187,9 +2267,7 @@ stagger(); reveal();
     var f = $('filters'); f.hidden = !f.hidden;
     this.classList.toggle('active', !f.hidden); this.setAttribute('aria-pressed', f.hidden ? 'false' : 'true');
   });
-  $('favOnly').addEventListener('click', function(){
-    S.favOnly = !S.favOnly; this.classList.toggle('active', S.favOnly); this.setAttribute('aria-pressed', S.favOnly ? 'true' : 'false'); refilter();
-  });
+  $('favOnly').addEventListener('click', function(){ openCalc(null, true); });
 
   /* --- сортировка --- */
   var THK = { 'Напиток':'name', 'Коктейль':'name', 'Энергетик':'name', 'Продукт':'name', 'Варка':'time', 'Смешивание':'time',
@@ -2232,43 +2310,93 @@ stagger(); reveal();
     var f = e.target.closest('.fav'), c = e.target.closest('.cbtn');
     if (f) {
       var r = f.closest('tr'), k = r._d.k;
-      if (FAV[k]) delete FAV[k]; else FAV[k] = 1;
-      saveFav(); setFavUi(r); updFavN(); if (S.favOnly) refilter();
+      toggleFav(r);
     } else if (c) {
       openCalc(c.closest('tr')._d.k);
     }
   });
 
-  /* --- калькулятор --- */
-  var calc = $('calc'), cN = $('cN');
+  /* --- калькулятор: отдельное окно --- */
+  var calc = $('calc'), cN = $('cN'), cur = null, tab = 'all', lq = '';
+  function el(t, c, x){ var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+  function icon(r, c){ var s = r.querySelector('td.nm img'), i = el('img', c); i.alt = ''; if (s) i.src = s.getAttribute('src'); return i; }
   function getN(){ var n = parseInt(cN.value, 10); return isNaN(n) ? 1 : Math.max(1, Math.min(999, n)); }
+  function toggleFav(r){
+    var k = r._d.k; if (FAV[k]) delete FAV[k]; else FAV[k] = 1;
+    saveFav(); setFavUi(r); updFavN(); cmRefresh();
+  }
+  function visible(){
+    return DRINKS.filter(function(r){ var d = r._d; return (tab !== 'fav' || FAV[d.k]) && (!lq || d.name.toLowerCase().indexOf(lq) > -1); });
+  }
+  function renderList(){
+    var box = $('cmList'), list = visible(), last = ''; box.innerHTML = '';
+    if (!list.length) { box.appendChild(el('p', 'cm-empty', tab === 'fav' && !lq ? 'Пока пусто. Нажмите ☆ у напитка в таблице или в этом окне — он появится здесь.' : 'Ничего не найдено.')); return; }
+    list.forEach(function(r){
+      var d = r._d;
+      if (d.cat !== last) { last = d.cat; var h = $(d.cat); box.appendChild(el('div', 'cm-grp', h ? clean(h.textContent) : d.cat)); }
+      var b = el('button', 'cm-it' + (d.k === cur ? ' on' : '')); b.type = 'button'; b.dataset.k = d.k;
+      b.appendChild(icon(r, '')); b.appendChild(el('span', 'cm-nm', d.name));
+      if (FAV[d.k]) b.appendChild(el('span', 'cm-st', '★'));
+      box.appendChild(b);
+    });
+  }
   function renderCalc(){
-    var r = ROW[$('cDrink').value], n = getN(), out = $('cOut'), meta = $('cMeta');
-    out.innerHTML = ''; meta.innerHTML = ''; if (!r) return;
+    var r = ROW[cur], n = getN(), out = $('cOut'), meta = $('cMeta'), hero = $('cmHero'), tot = $('cTot');
+    out.innerHTML = meta.innerHTML = hero.innerHTML = tot.innerHTML = '';
+    $('cmMain').classList.toggle('none', !r);
+    if (!r) return;
+    hero.appendChild(icon(r, 'cm-big')); hero.appendChild(el('h3', 'cm-name', r._d.name));
+    var fb = el('button', 'cm-fav' + (FAV[cur] ? ' on' : ''), FAV[cur] ? '★ В избранном' : '☆ В избранное'); fb.type = 'button'; hero.appendChild(fb);
+    ['Варка', 'Смешивание', 'Время', 'Дист.', 'Выдержка', 'Креп.'].forEach(function(l){
+      var c = r.querySelector('td[data-label="' + l + '"]'), v = c ? clean(c.textContent) : '';
+      if (!v || v === '—') return;
+      var sp = el('span', 'cm-chip'); sp.appendChild(el('i', '', l)); sp.appendChild(document.createTextNode(v)); meta.appendChild(sp);
+    });
+    r.querySelectorAll('.fx').forEach(function(f){ meta.appendChild(el('span', 'cm-chip ' + (f.classList.contains('neg') ? 'cm-neg' : 'cm-fx'), clean(f.textContent))); });
     var total = 0;
     r.querySelectorAll('.ing').forEach(function(sp){
-      var q = sp.querySelector('.q'), base = parseInt(q ? q.textContent : '1', 10) || 1, c = sp.cloneNode(true), cq = c.querySelector('.q');
-      if (cq) cq.textContent = (base * n) + 'x';
-      total += base * n; out.appendChild(c);
+      var q = sp.querySelector('.q'), base = parseInt(q ? q.textContent : '1', 10) || 1, im = sp.querySelector('img');
+      var nm = clean(sp.textContent.replace(q ? q.textContent : '', '')); total += base * n;
+      var c = el('div', 'cm-ing'), i = el('img'); i.alt = ''; if (im) i.src = im.getAttribute('src'); c.appendChild(i);
+      var t = el('div', 'cm-itx'); t.appendChild(el('b', '', nm)); t.appendChild(el('small', '', n > 1 ? 'по ' + base + ' за варку' : 'на одну варку')); c.appendChild(t);
+      c.appendChild(el('span', 'cm-cnt', '×' + (base * n))); out.appendChild(c);
     });
-    var t = document.createElement('div'); t.className = 'calc-total'; t.textContent = 'Всего предметов: ' + total; out.appendChild(t);
-    var parts = [];
-    ['Варка', 'Смешивание', 'Время', 'Дист.', 'Выдержка', 'Креп.'].forEach(function(l){
-      var c = r.querySelector('td[data-label="' + l + '"]');
-      if (c && clean(c.textContent) && clean(c.textContent) !== '—') parts.push('<b>' + l + ':</b> ' + clean(c.textContent).replace(/</g, '&lt;'));
-    });
-    meta.innerHTML = 'На одну варку: ' + parts.join(' · ');
+    var tm = r._d.time, x = 'Всего предметов: ' + total;
+    if (tm && n > 1) x += ' · одна бочка подряд: ' + (tm * n) + ' мин';
+    tot.textContent = x;
   }
-  function openCalc(k){
-    calc.hidden = false; $('calcOpen').classList.add('active'); $('calcOpen').setAttribute('aria-pressed', 'true');
-    if (k) $('cDrink').value = k;
-    renderCalc();
-    calc.scrollIntoView({ behavior:'smooth', block:'center' });
+  function cmRefresh(){
+    if (calc.hidden) return;
+    var l = visible();
+    if (!cur || !l.some(function(r){ return r._d.k === cur; })) cur = l.length ? l[0]._d.k : null;
+    $('cmAll').classList.toggle('on', tab === 'all'); $('cmFav').classList.toggle('on', tab === 'fav');
+    renderList(); renderCalc();
   }
-  function closeCalc(){ calc.hidden = true; $('calcOpen').classList.remove('active'); $('calcOpen').setAttribute('aria-pressed', 'false'); }
-  $('calcOpen').addEventListener('click', function(){ if (calc.hidden) openCalc(); else closeCalc(); });
+  function openCalc(k, fav){
+    if (k) cur = k;
+    tab = fav ? 'fav' : 'all'; lq = ''; $('cmQ').value = '';
+    calc.hidden = false; document.body.style.overflow = 'hidden';
+    $('calcOpen').classList.add('active'); $('calcOpen').setAttribute('aria-pressed', 'true');
+    cmRefresh();
+    var a = $('cmList').querySelector('.on'); if (a) a.scrollIntoView({ block:'nearest' });
+  }
+  function closeCalc(){
+    calc.hidden = true; document.body.style.overflow = '';
+    $('calcOpen').classList.remove('active'); $('calcOpen').setAttribute('aria-pressed', 'false');
+  }
+  $('calcOpen').addEventListener('click', function(){ if (calc.hidden) openCalc(null, false); else closeCalc(); });
   $('calcClose').addEventListener('click', closeCalc);
-  $('cDrink').addEventListener('change', renderCalc);
+  $('cmBg').addEventListener('click', closeCalc);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !calc.hidden) closeCalc(); });
+  $('cmAll').addEventListener('click', function(){ tab = 'all'; cmRefresh(); });
+  $('cmFav').addEventListener('click', function(){ tab = 'fav'; cmRefresh(); });
+  $('cmQ').addEventListener('input', function(){ lq = this.value.toLowerCase().trim(); cmRefresh(); });
+  $('cmList').addEventListener('click', function(e){
+    var b = e.target.closest('.cm-it'); if (!b) return;
+    cur = b.dataset.k; renderList(); renderCalc();
+  });
+  $('cmHero').addEventListener('click', function(e){ if (e.target.closest('.cm-fav') && ROW[cur]) toggleFav(ROW[cur]); });
+  $('cmPre').addEventListener('click', function(e){ var b = e.target.closest('button'); if (b) { cN.value = b.dataset.n; renderCalc(); } });
   cN.addEventListener('input', renderCalc);
   cN.addEventListener('change', function(){ cN.value = getN(); renderCalc(); });
   $('cMinus').addEventListener('click', function(){ cN.value = Math.max(1, getN() - 1); renderCalc(); });
