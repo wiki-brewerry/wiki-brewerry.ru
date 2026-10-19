@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <!-- ==================================================================
-  ВЕРСИЯ САЙТА: 1.2
+  ВЕРСИЯ САЙТА: 1.4
   Источник версии — ТОЛЬКО тег <meta name="site-version"> ниже.
   Плашка разработчика в сайдбаре подхватывает его сама.
 
@@ -57,8 +57,20 @@
         • в правом нижнем углу светится тыква-фонарь: клик — «БУУ!», призраки
           взлетают вверх и экран вздрагивает
         • всё это отключается при prefers-reduced-motion и в фиолетовой теме
+  1.4 — ОБНОВЛЕНИЕ ОБУЧАЮЩИХ РАЗДЕЛОВ И МЕДИА:
+        • фото и видео теперь берутся из media/Фото/ и media/Видео/
+        • таблица «Из чего строить бочку»: иконки досок из media/ing/ (дуб, ель,
+          берёза, тропика, акация, тёмный дуб, багровая, искажённая, вишня,
+          бледный дуб, медь), добавлена бамбуковая бочка
+        • разделы «Варка», «Дистиллирование», «Бочка», «Запечатывание»
+          переработаны: шаги с линией и анимацией, плашки режимов, карточки бочек
+        • в разделе «Бочка» описана табличка с надписью «Бочка» / «бочка»,
+          иконки ступенек, досок и таблички
+        • фото открываются на весь экран с приближением (колесо, +/−,
+          перетаскивание, Esc)
+        • в котёл всегда наливается вода
 =================================================================== -->
-<meta name="site-version" content="1.2">
+<meta name="site-version" content="1.4">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="media/ico/slarof.png">
 <title>Brewerry Wiki — база знаний сервера Slarof</title>
@@ -687,7 +699,7 @@ body.navlock main{-webkit-user-select:none;user-select:none}
 
 /* --- текстуры досок в таблице бочек --- */
 .bt td.bn .tex{width:32px;height:32px;box-sizing:content-box;border:2px solid #000;margin-right:12px;
-  vertical-align:-11px;image-rendering:pixelated;background:#222;box-shadow:2px 2px 0 rgba(0,0,0,.45)}
+  vertical-align:-11px;image-rendering:auto;object-fit:contain;padding:2px;background:#222;box-shadow:2px 2px 0 rgba(0,0,0,.45)}
 
 /* ================= ТЕЛЕФОН / ПЛАНШЕТ ================= */
 @media (max-width:1000px){
@@ -1098,6 +1110,83 @@ h2{text-shadow:1px 1px #3a1a05}
   if(on){ document.getElementById('halloween-theme').media='all'; document.documentElement.classList.add('halloween'); }
 })();
 </script>
+<style id="barrel-css">
+/* ===== Обучающие разделы: единый вид (шаги, режимы, медиа) ===== */
+.flow{list-style:none;counter-reset:fl;margin:18px 0 8px;padding:0}
+.flow>li{counter-increment:fl;position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:16px;padding-bottom:14px}
+.flow>li::before{content:counter(fl);width:32px;height:32px;display:flex;align-items:center;justify-content:center;font:12px var(--font-pixel);color:#fff;text-shadow:2px 2px #000;
+  background-color:var(--green-dark);background-image:linear-gradient(var(--green),var(--green-dark));border:2px solid #000;box-shadow:inset -2px -2px rgba(0,0,0,.35),inset 2px 2px rgba(255,255,255,.25);z-index:1;transition:transform .2s}
+.flow>li::after{content:"";position:absolute;left:15px;top:34px;bottom:2px;width:2px;background:var(--border)}
+.flow>li:last-child{padding-bottom:0}.flow>li:last-child::after{display:none}
+.fb{background:var(--bg-card);border:2px solid var(--border);padding:12px 16px}
+.fb h4{font-size:15px;color:#fff;margin:0 0 4px;line-height:1.35}
+.fb p{margin:0;font-size:14px;color:#c9c9d2}
+.fb .chips{padding:10px 0 0}
+.flow>li.key .fb{border-color:var(--amber)}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mode{display:flex;gap:10px;align-items:flex-start;background:#14141a;border:2px solid var(--border);padding:10px 12px;font-size:13.5px;line-height:1.45}
+.mode img{width:28px;height:28px;image-rendering:pixelated;flex:none;filter:drop-shadow(1px 1px #000)}
+.mode b{display:block;color:#fff;margin-bottom:1px}.mode span{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:#14141a;border:2px solid var(--border);padding:5px 12px 5px 6px;font-size:13px;line-height:1.2}
+.chip img{width:26px;height:26px;image-rendering:pixelated;flex:none;filter:drop-shadow(1px 1px #000)}
+.chip.t{padding-left:12px}
+.chip b{color:var(--amber)}.chip.sg{border-color:#8a6a35}
+.sign{display:inline-block;margin-top:10px;padding:7px 18px;background:#b8945f;border:3px solid #5e4a2a;box-shadow:inset 0 0 0 2px #cfae78,3px 3px 0 rgba(0,0,0,.45);
+  color:#1a1209;font:700 15px var(--font-pixel);letter-spacing:.5px;text-align:center}
+.sign small{display:block;font:600 10px var(--font-sans);color:#4a3a20;letter-spacing:0;margin-top:2px}
+.key{display:inline-block;padding:0 8px;background:#14141a;border:2px solid var(--border2);border-bottom-width:4px;font:11px/1.7 var(--font-pixel);color:#fff;margin:0 1px}
+.bdone{display:flex;gap:10px;align-items:center;background:rgba(110,182,67,.1);border:2px solid var(--green-dark);padding:10px 14px;margin:14px 0 4px;font-size:14px}
+.bdone img{width:24px;height:24px;image-rendering:pixelated;flex:none}
+.bcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
+.bcard{background:var(--bg-card);border:2px solid var(--border)}
+.bcard-h{padding:11px 16px;border-bottom:2px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--bg-card2)}
+.bcard-h b{font-size:16px;color:#fff}.bcard-h span{font-size:12px;color:var(--muted)}
+/* единые рамки для всех фото/видео: 16:9, без обрезки */
+.vid-grid video,.vid-grid img.shot,.bcard img.shot{aspect-ratio:16/9;object-fit:contain;background:#000}
+
+.fb h4:last-child{margin:0}
+.bcard .need{margin:12px 16px 0;font-size:14px;color:#c9c9d2;line-height:2.3}
+.ii{width:32px;height:32px;object-fit:contain;image-rendering:auto;-ms-interpolation-mode:bicubic;vertical-align:-11px;margin:0 6px 0 2px;filter:drop-shadow(1px 1px 1px rgba(0,0,0,.6));backface-visibility:hidden;transform:translateZ(0)}
+.fb h4 .ii{vertical-align:-11px}
+.bcard figure{margin:12px 16px 16px}
+/* анимации */
+@keyframes lineGrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes badgePop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.flow>li::after{transform-origin:top;animation:lineGrow .5s ease both}
+.flow>li::before{animation:badgePop .45s cubic-bezier(.34,1.56,.64,1) both}
+.flow>li:nth-child(1)::before,.flow>li:nth-child(1)::after{animation-delay:.05s}
+.flow>li:nth-child(2)::before,.flow>li:nth-child(2)::after{animation-delay:.18s}
+.flow>li:nth-child(3)::before,.flow>li:nth-child(3)::after{animation-delay:.31s}
+.flow>li:nth-child(4)::before,.flow>li:nth-child(4)::after{animation-delay:.44s}
+.fb{transition:transform .18s,border-color .18s,box-shadow .18s,background .18s}
+.flow>li:hover .fb{transform:translateX(5px);border-color:var(--green-dark);background:var(--bg-card2);box-shadow:4px 4px 0 rgba(0,0,0,.35),0 0 14px rgba(110,182,67,.15)}
+.flow>li:hover::before{transform:scale(1.12) rotate(-6deg)}
+.flow>li.key:hover .fb{border-color:var(--amber)}
+.bcard{transition:transform .2s,border-color .2s,box-shadow .2s}
+.bcard:hover{transform:translateY(-4px);border-color:var(--green-dark);box-shadow:5px 5px 0 rgba(0,0,0,.4)}
+.mode{transition:transform .15s,border-color .15s}.mode:hover{transform:translateY(-2px);border-color:var(--green-dark)}
+.sign{transition:transform .2s;transform-origin:50% 0}.sign:hover{animation:swing .9s ease-in-out}
+@keyframes swing{20%{transform:rotate(5deg)}40%{transform:rotate(-4deg)}60%{transform:rotate(2deg)}80%{transform:rotate(-1deg)}}
+/* фото: можно открыть и приблизить */
+img.shot{cursor:zoom-in;transition:transform .25s,box-shadow .25s,filter .25s}
+figure:hover img.shot{filter:brightness(1.1)}
+.zoomable{position:relative;overflow:hidden}
+.lb{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .25s;user-select:none;-webkit-user-select:none}
+.lb.open{opacity:1;pointer-events:auto}
+.lb img{max-width:94vw;max-height:88vh;border:3px solid var(--border2);box-shadow:0 0 40px #000;cursor:grab;
+  transform:translate(var(--x,0),var(--y,0)) scale(var(--z,1));transition:transform .15s ease-out;transform-origin:center;touch-action:none;
+  animation:lbIn .3s ease both}
+.lb.drag img{transition:none;cursor:grabbing}
+@keyframes lbIn{from{opacity:0;scale:.92}to{opacity:1;scale:1}}
+.lb-bar{position:absolute;top:14px;right:14px;display:flex;gap:8px}
+.lb-bar button{width:42px;height:42px;font:700 20px var(--font-pixel);color:#fff;background:#2a2a32;border:2px solid #000;box-shadow:inset -2px -2px #111,inset 2px 2px #555;cursor:pointer}
+.lb-bar button:hover{background:var(--green-dark)}
+.lb-cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#c9c9d2;font-size:13px;padding:0 60px}
+.lb-hint{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+@media(max-width:900px){.bcards,.modes{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 
@@ -1214,30 +1303,25 @@ h2{text-shadow:1px 1px #3a1a05}
 
       <p class="lead">Первый шаг создания напитка. Тут всё просто: либо <b>варим</b>, либо <b>смешиваем</b>.</p>
 
-      <h2>1. Подготавливаем котёл</h2>
-      <p>Сначала решите, что вы делаете:</p>
-      <ul class="list">
-        <li class="ico"><img class="mci" src="media/ing/blaze_powder.png" alt=""> <b>Варка</b> — под котлом нужен источник тепла (костёр, магма-блок, огонь).</li>
-        <li class="ico"><img class="mci" src="media/ing/snowball.png" alt=""> <b>Смешивание</b> — источник тепла <b>не нужен</b>.</li>
-      </ul>
-      <p>Когда определились — налейте в котёл подходящее наполнение:</p>
-      <ul class="list">
-        <li>вода</li>
-        <li>рыхлый снег</li>
-        <li>лава</li>
-      </ul>
-
-      <h2>2. Добавляем ингредиенты</h2>
-      <p>Как только ингредиенты попали в котёл — начинается варка или смешивание. Над котлом появятся <b>частицы</b>.</p>
+      <h2>Пошагово</h2>
+      <ol class="flow">
+        <li><div class="fb"><h4>Выберите режим</h4><p>Сначала решите, что вы делаете: варите или смешиваете.</p>
+          <div class="modes">
+            <div class="mode"><img src="media/ing/blaze_powder.png" alt=""><div><b>Варка</b><span>Под котлом нужен источник тепла: костёр, магма-блок или огонь.</span></div></div>
+            <div class="mode"><img src="media/ing/snowball.png" alt=""><div><b>Смешивание</b><span>Источник тепла <b style="display:inline">не нужен</b>.</span></div></div>
+          </div></div></li>
+        <li><div class="fb"><h4>Налейте воду</h4><p>В котёл всегда наливается вода.</p></div></li>
+        <li><div class="fb"><h4>Добавьте ингредиенты</h4><p>Как только ингредиенты попали в котёл — начинается варка или смешивание. Над котлом появятся <b>частицы</b>.</p></div></li>
+        <li class="key"><div class="fb"><h4>Соберите напиток</h4><p>Когда котёл проработает нужное время — нажмите <span class="key">ПКМ</span> по котлу <b>пустыми бутылками</b> в руке.</p></div></li>
+      </ol>
 
       <div class="vid-grid">
         <figure>
-          <video controls preload="metadata"><source src="Видео/Варка и смешивание.mp4" type="video/mp4"></video>
+          <video controls preload="metadata"><source src="media/Видео/Варка и смешивание.mp4" type="video/mp4"></video>
           <figcaption>Работа с котлом: наполнение и варка</figcaption>
         </figure>
       </div>
 
-      <div class="callout"><span class="co-icon"><img class="mci" src="media/ing/glowstone_dust.png" alt=""></span><div>Когда котёл проработает нужное время — нажмите <b>ПКМ</b> по котлу <b>пустыми бутылками</b> в руке, чтобы собрать содержимое.</div></div>
       <div class="callout star"><span class="co-icon"><img class="mci" data-mc="nether_star" alt=""></span><div><b>Фишечка:</b> если частицы меняют цвет — это не просто так. Цвет подсказывает, что происходит с напитком.</div></div>
       <div class="pager"><span></span><button class="mc-btn stone" data-page="home">На главную</button><button class="mc-btn" data-page="distill">Следующая: Дистиллирование →</button></div>
     </div>
@@ -1251,19 +1335,20 @@ h2{text-shadow:1px 1px #3a1a05}
 
       <p class="lead">Дистилляция — второй этап производства для части напитков. Число циклов перегонки напрямую влияет на <b>крепость</b> и <b>чистоту</b> готового продукта.</p>
 
-      <ol class="num">
-        <li>Соберите напиток из котла в бутылки.</li>
-        <li>Откройте варочную стойку (Distillery).</li>
-        <li>Поместите бутылки и дождитесь нужного числа циклов.</li>
+      <h2>Пошагово</h2>
+      <ol class="flow">
+        <li><div class="fb"><h4>Соберите напиток из котла в бутылки</h4></div></li>
+        <li><div class="fb"><h4>Откройте варочную стойку (Distillery)</h4></div></li>
+        <li class="key"><div class="fb"><h4>Поместите бутылки и дождитесь нужного числа циклов</h4></div></li>
       </ol>
 
       <div class="vid-grid">
         <figure>
-          <video controls preload="metadata"><source src="Видео/Дистиллирование используем.webm" type="video/webm"></video>
+          <video controls preload="metadata"><source src="media/Видео/Дистиллирование используем.webm" type="video/webm"></video>
           <figcaption>Использование дистиллятора</figcaption>
         </figure>
         <figure>
-          <video controls preload="metadata"><source src="Видео/Дистиллирование-строим.mp4" type="video/mp4"></video>
+          <video controls preload="metadata"><source src="media/Видео/Дистиллирование-строим.mp4" type="video/mp4"></video>
           <figcaption>Постройка дистиллятора</figcaption>
         </figure>
       </div>
@@ -1283,27 +1368,36 @@ h2{text-shadow:1px 1px #3a1a05}
 
       <div class="callout warn"><span class="co-icon"><img class="mci" data-mc="warning" alt=""></span><div><b>Тип дерева имеет значение!</b> Некоторым напиткам всё равно, в какой бочке лежать. А некоторые требуют, например, именно <b>дубовую</b> бочку.</div></div>
 
-      <h2>1. Создание бочки</h2>
-      <p>Бочка строится так: ставите блоки в правильном положении и <b>в последнюю очередь</b> — табличку.</p>
-      <p>Если всё сделано верно — в чате появится подтверждение. После этого табличку можно убрать.</p>
+      <h2>Как построить бочку</h2>
+      <ol class="flow">
+        <li><div class="fb"><h4>Выберите вид бочки</h4><p>Малая (из <img class="ii" src="media/ing/Invicon_Oak_Stairs.png" alt="">ступенек) или большая (<img class="ii" src="media/ing/Invicon_Oak_Stairs.png" alt="">ступеньки и <img class="ii" src="media/ing/Oak_Planks.webp" alt="">блоки дерева). Всё должно быть из одной породы.</p></div></li>
+        <li><div class="fb"><h4>Расставьте блоки</h4><p>Поставьте их по схеме ниже. Табличку пока не трогайте.</p></div></li>
+        <li class="key"><div class="fb"><h4><img class="ii" src="media/ing/Invicon_Oak_Sign.png" alt="">Табличка — в последнюю очередь</h4><p>Повесьте табличку на бочку и напишите на ней слово:</p>
+          <div class="sign">Бочка<small>или «бочка» — регистр не важен</small></div></div></li>
+      </ol>
+      <div class="callout star"><span class="co-icon"><img class="mci" data-mc="nether_star" alt=""></span><div>Если всё сделано верно — в чате появится подтверждение. После этого табличку можно убрать.</div></div>
 
-      <h2>2. Два основных вида бочек</h2>
+      <h2>Два основных вида бочек</h2>
       <p>Помимо возможных кастомных бочек на вашем сервере, существует два стандартных вида:</p>
-
-      <h3>Малая бочка</h3>
-      <div class="callout star"><span class="co-icon"><img class="mci" data-mc="nether_star" alt=""></span><div>Для бочки понадобится: <b>8 ступенек, 1 табличка</b> с названием: Бочка, бочка.</div></div>
-      <figure><img class="shot" src="Фото/image (1).png" alt="Малая бочка"><figcaption>Малая бочка — вид со стороны таблички</figcaption></figure>
-
-      <h3>Большая бочка</h3>
-      <div class="callout star"><span class="co-icon"><img class="mci" data-mc="nether_star" alt=""></span><div>Для бочки понадобится: <b>16 ступенек, 12 блоков дерева, 1 табличка</b> с названием: Бочка, бочка.</div></div>
-      <figure><img class="shot" src="Фото/image (2).png" alt="Большая бочка"><figcaption>Большая бочка из блоков дерева</figcaption></figure>
+      <div class="bcards">
+        <div class="bcard">
+          <div class="bcard-h"><b>Малая бочка</b></div>
+          <p class="need">Понадобится: <img class="ii" src="media/ing/Invicon_Oak_Stairs.png" alt=""><b>8 ступенек</b> и <img class="ii" src="media/ing/Invicon_Oak_Sign.png" alt=""><b>1 табличка</b> с надписью «Бочка» или «бочка».</p>
+          <figure><img class="shot" src="media/Фото/image (1).png" alt="Малая бочка"><figcaption>Малая бочка — вид со стороны таблички</figcaption></figure>
+        </div>
+        <div class="bcard">
+          <div class="bcard-h"><b>Большая бочка</b></div>
+          <p class="need">Понадобится: <img class="ii" src="media/ing/Invicon_Oak_Stairs.png" alt=""><b>16 ступенек</b>, <img class="ii" src="media/ing/Oak_Planks.webp" alt=""><b>12 блоков дерева</b> и <img class="ii" src="media/ing/Invicon_Oak_Sign.png" alt=""><b>1 табличка</b> с надписью «Бочка» или «бочка».</p>
+          <figure><img class="shot" src="media/Фото/image (2).png" alt="Большая бочка"><figcaption>Большая бочка из блоков дерева</figcaption></figure>
+        </div>
+      </div>
 
       <div class="callout"><span class="co-icon"><img class="mci" data-mc="anvil" alt=""></span><div><b>Если ни одна из этих бочек не работает</b> — вы неправильно построили данную бочку. Рекомендую посмотреть на схему заново!</div></div>
 
       <h2>Примеры бочек разных пород</h2>
       <div class="vid-grid">
-        <figure><img class="shot" src="Фото/image (3).png" alt="Бочки из разных пород дерева"><figcaption>Бочки из разных пород дерева</figcaption></figure>
-        <figure><img class="shot" src="Фото/image (4).png" alt="Бочки Незера и специальные"><figcaption>Бочки Незера и специальные бочки</figcaption></figure>
+        <figure><img class="shot" src="media/Фото/image (3).png" alt="Бочки из разных пород дерева"><figcaption>Бочки из разных пород дерева</figcaption></figure>
+        <figure><img class="shot" src="media/Фото/image (4).png" alt="Бочки Незера и специальные"><figcaption>Бочки Незера и специальные бочки</figcaption></figure>
       </div>
 
       <h2>Из чего строить бочку</h2>
@@ -1312,17 +1406,18 @@ h2{text-shadow:1px 1px #3a1a05}
         <table class="bt">
           <thead><tr><th><span class="th-ico"></span>Тип бочки</th><th>Ступени</th><th>Доски</th><th>Заборы</th></tr></thead>
           <tbody>
-            <tr style="--wc:#b8945f"><td class="bn"><img class="tex" data-wood="oak" alt="">Дубовая</td><td>Дубовые</td><td>Дубовые</td><td>Дубовый</td></tr>
-            <tr style="--wc:#6b4a2b"><td class="bn"><img class="tex" data-wood="spruce" alt="">Еловая</td><td>Еловые</td><td>Еловые</td><td>Еловый</td></tr>
-            <tr style="--wc:#d6c78d"><td class="bn"><img class="tex" data-wood="birch" alt="">Берёзовая</td><td>Берёзовые</td><td>Берёзовые</td><td>Берёзовый</td></tr>
-            <tr style="--wc:#a0714f"><td class="bn"><img class="tex" data-wood="jungle" alt="">Тропическая</td><td>Тропические</td><td>Тропические</td><td>Тропический</td></tr>
-            <tr style="--wc:#c0653a"><td class="bn"><img class="tex" data-wood="acacia" alt="">Акациевая</td><td>Акациевые</td><td>Акациевые</td><td>Акациевый</td></tr>
-            <tr style="--wc:#4a3320"><td class="bn"><img class="tex" data-wood="dark_oak" alt="">Тёмно-дубовая</td><td>Тёмно-дубовые</td><td>Тёмно-дубовые</td><td>Тёмно-дубовый</td></tr>
-            <tr style="--wc:#8c3a5a"><td class="bn"><img class="tex" data-wood="crimson" alt="">Багровая<span class="tag nether">Незер</span></td><td>Багровые</td><td>Багровые</td><td>Багровый</td></tr>
-            <tr style="--wc:#2b8a86"><td class="bn"><img class="tex" data-wood="warped" alt="">Искажённая<span class="tag nether">Незер</span></td><td>Искажённые</td><td>Искажённые</td><td>Искажённый</td></tr>
-            <tr style="--wc:#e8a9b4"><td class="bn"><img class="tex" data-wood="cherry" alt="">Вишнёвая</td><td>Вишнёвые</td><td>Вишнёвые</td><td>Вишнёвый</td></tr>
-            <tr style="--wc:#e3d9c8"><td class="bn"><img class="tex" data-wood="pale_oak" alt="">Бледно-дубовая</td><td>Бледно-дубовые</td><td>Бледно-дубовые</td><td>Бледно-дубовый</td></tr>
-            <tr style="--wc:#c8714a"><td class="bn"><img class="tex" data-wood="copper" alt="">Медная<span class="tag spec">Особая</span></td><td class="alt">Резные медные</td><td class="alt">Резной медный блок</td><td class="alt">Любой деревянный</td></tr>
+            <tr style="--wc:#b8945f"><td class="bn"><img class="tex" data-wood="oak" src="media/ing/Oak_Planks.webp" alt="">Дубовая</td><td>Дубовые</td><td>Дубовые</td><td>Дубовый</td></tr>
+            <tr style="--wc:#6b4a2b"><td class="bn"><img class="tex" data-wood="spruce" src="media/ing/Spruce_Planks_JE5.png" alt="">Еловая</td><td>Еловые</td><td>Еловые</td><td>Еловый</td></tr>
+            <tr style="--wc:#d6c78d"><td class="bn"><img class="tex" data-wood="birch" src="media/ing/Birch_Planks.webp" alt="">Берёзовая</td><td>Берёзовые</td><td>Берёзовые</td><td>Берёзовый</td></tr>
+            <tr style="--wc:#a0714f"><td class="bn"><img class="tex" data-wood="jungle" src="media/ing/Jungle_Planks_JE3_BE2.png" alt="">Тропическая</td><td>Тропические</td><td>Тропические</td><td>Тропический</td></tr>
+            <tr style="--wc:#c0653a"><td class="bn"><img class="tex" data-wood="acacia" src="media/ing/Acacia_Planks.webp" alt="">Акациевая</td><td>Акациевые</td><td>Акациевые</td><td>Акациевый</td></tr>
+            <tr style="--wc:#4a3320"><td class="bn"><img class="tex" data-wood="dark_oak" src="media/ing/Dark_Oak_Planks_JE3_BE2.png" alt="">Тёмно-дубовая</td><td>Тёмно-дубовые</td><td>Тёмно-дубовые</td><td>Тёмно-дубовый</td></tr>
+            <tr style="--wc:#8c3a5a"><td class="bn"><img class="tex" data-wood="crimson" src="media/ing/Crimson_Planks_JE1_BE1.png" alt="">Багровая<span class="tag nether">Незер</span></td><td>Багровые</td><td>Багровые</td><td>Багровый</td></tr>
+            <tr style="--wc:#2b8a86"><td class="bn"><img class="tex" data-wood="warped" src="media/ing/Warped_Planks_JE1_BE1.png" alt="">Искажённая<span class="tag nether">Незер</span></td><td>Искажённые</td><td>Искажённые</td><td>Искажённый</td></tr>
+            <tr style="--wc:#e8a9b4"><td class="bn"><img class="tex" data-wood="cherry" src="media/ing/Cherry_Planks_JE1_BE1.png" alt="">Вишнёвая</td><td>Вишнёвые</td><td>Вишнёвые</td><td>Вишнёвый</td></tr>
+            <tr style="--wc:#e3d9c8"><td class="bn"><img class="tex" data-wood="pale_oak" src="media/ing/Pale_Oak_Planks_JE1_BE1.png" alt="">Бледно-дубовая</td><td>Бледно-дубовые</td><td>Бледно-дубовые</td><td>Бледно-дубовый</td></tr>
+            <tr style="--wc:#d9c35a"><td class="bn"><img class="tex" data-wood="bamboo" src="media/ing/Bamboo_Planks_JE2_BE2.png" alt="">Бамбуковая</td><td>Бамбуковые</td><td>Бамбуковые</td><td>Бамбуковый</td></tr>
+            <tr style="--wc:#c8714a"><td class="bn"><img class="tex" data-wood="copper" src="media/ing/Cut_Copper_JE2_BE1.png" alt="">Медная<span class="tag spec">Особая</span></td><td class="alt">Резные медные</td><td class="alt">Резной медный блок</td><td class="alt">Любой деревянный</td></tr>
           </tbody>
         </table>
       </div></div>
@@ -1345,26 +1440,29 @@ h2{text-shadow:1px 1px #3a1a05}
 
       <h2><img class="mci" data-mc="book_seal" alt="">Запечатывание</h2>
       <p>Процесс очень простой:</p>
-      <ol class="steps">
-        <li><b>Возьмите напиток</b> <i>в основную руку.</i></li>
-        <li><b>Возьмите бумагу</b> <i>в левую руку.</i></li>
-        <li><b>SHIFT + ПКМ</b> <i>по верстаку.</i></li>
+      <ol class="flow">
+        <li><div class="fb"><h4>Возьмите напиток</h4><p>В основную руку.</p></div></li>
+        <li><div class="fb"><h4>Возьмите бумагу</h4><p>В левую руку.</p></div></li>
+        <li class="key"><div class="fb"><h4>Нажмите по верстаку</h4><p><span class="key">SHIFT</span> + <span class="key">ПКМ</span>. Бумага израсходуется, а напиток станет запечатанным.</p></div></li>
       </ol>
-      <p>Бумага израсходуется, а напиток станет запечатанным.</p>
 
       <div class="vid-grid">
         <figure>
-          <video controls preload="metadata"><source src="Видео/Запечатование.mp4" type="video/mp4"></video>
+          <video controls preload="metadata"><source src="media/Видео/Запечатование.mp4" type="video/mp4"></video>
           <figcaption>Процесс запечатывания напитка</figcaption>
         </figure>
       </div>
 
       <h2><img class="mci" data-mc="name_tag" alt="">Брендирование</h2>
-      <p>Делается точно так же, но с одним условием: перед использованием <b>переименуйте бумагу</b> — вместо её названия напишите текст, который хотите добавить в описание напитка.</p>
+      <p>Делается точно так же, но с одним условием — бумагу нужно подготовить заранее:</p>
+      <ol class="flow">
+        <li><div class="fb"><h4>Переименуйте бумагу</h4><p>Вместо её названия напишите текст, который хотите добавить в описание напитка.</p></div></li>
+        <li class="key"><div class="fb"><h4>Запечатайте как обычно</h4><p>Напиток в основную руку, бумага в левую, <span class="key">SHIFT</span> + <span class="key">ПКМ</span> по верстаку.</p></div></li>
+      </ol>
 
       <div class="vid-grid">
         <figure>
-          <video controls preload="metadata"><source src="Видео/Брендирование.mp4" type="video/mp4"></video>
+          <video controls preload="metadata"><source src="media/Видео/Брендирование.mp4" type="video/mp4"></video>
           <figcaption>Брендирование напитка своим текстом</figcaption>
         </figure>
       </div>
@@ -1886,7 +1984,7 @@ var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(
   es.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 }, { threshold: .08 }) : null;
 function reveal() {
-  document.querySelectorAll('.page.active h2, .page.active .tw, .page.active .vid-grid, .page.active .callout').forEach(function(el) {
+  document.querySelectorAll('.page.active h2, .page.active .tw, .page.active .vid-grid, .page.active .callout, .page.active .flow > li, .page.active .bcard').forEach(function(el) {
     if (!el.classList.contains('rv')) { el.classList.add('rv'); }
     if (!el.classList.contains('in')) { io ? io.observe(el) : el.classList.add('in'); }
   });
@@ -2193,6 +2291,7 @@ stagger(); reveal();
     warped:   ['#2b6862','#37807a','#235751','#173a36'],
     cherry:   ['#e2b3ad','#efc6c0','#cf9a95','#a37470'],
     pale_oak: ['#e3d8c9','#efe6d9','#cfc2b2','#a79a8a'],
+    bamboo:   ['#cdb957','#dcc968','#b8a443','#7f7230'],
     copper:   ['#c06c4f','#d58a6a','#a8573e','#7e3d2b']
   };
   function rng(seed){ var s = seed >>> 0; return function(){ s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 4294967296; }; }
@@ -2229,7 +2328,10 @@ stagger(); reveal();
   }
   var i = 0;
   document.querySelectorAll('img.tex[data-wood]').forEach(function(img){
-    var k = img.getAttribute('data-wood'); if (PAL[k]) img.src = tex(k, 1234 + (i++) * 97);
+    var k = img.getAttribute('data-wood'), seed = 1234 + (i++) * 97;
+    function fb(){ if (PAL[k]) { img.onerror = null; img.src = tex(k, seed); } }  /* запасная текстура, если файла в media/ нет */
+    img.onerror = fb;
+    if (img.complete && img.naturalWidth === 0) fb();
   });
 })();
 
@@ -2686,6 +2788,39 @@ stagger(); reveal();
   window.addEventListener('resize',check);
   if(window.ResizeObserver) new ResizeObserver(check).observe(document.body);
   check();
+})();
+</script>
+<script>
+/* ===== Просмотр фото: клик — открыть, колесо/+ − — приблизить, перетаскивание, Esc — закрыть ===== */
+(function(){
+  var lb=document.createElement('div'); lb.className='lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-label','Просмотр фото');
+  lb.innerHTML='<img alt=""><div class="lb-bar"><button type="button" data-a="out" title="Уменьшить">−</button><button type="button" data-a="in" title="Приблизить">+</button><button type="button" data-a="x" title="Закрыть (Esc)">✕</button></div><div class="lb-cap"></div>';
+  document.body.appendChild(lb);
+  var im=lb.querySelector('img'), cap=lb.querySelector('.lb-cap'), z=1, x=0, y=0, drag=null;
+  function ap(){ im.style.setProperty('--z',z); im.style.setProperty('--x',x+'px'); im.style.setProperty('--y',y+'px'); }
+  function setZ(v){ z=Math.max(1,Math.min(6,v)); if(z===1){x=0;y=0;} ap(); }
+  function open(src,t){ im.src=src; cap.innerHTML=(t?t+'<span class="lb-hint">Колесо мыши — приблизить · перетащите, чтобы двигать · двойной клик — сброс</span>':''); z=1;x=0;y=0;ap(); lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+  document.addEventListener('click',function(e){
+    var t=e.target; if(t.tagName==='IMG' && t.classList.contains('shot') && !lb.contains(t)){
+      var f=t.closest('figure'), c=f&&f.querySelector('figcaption');
+      open(t.currentSrc||t.src, c?c.textContent:t.alt);
+    }
+  });
+  lb.addEventListener('click',function(e){
+    var a=e.target.getAttribute&&e.target.getAttribute('data-a');
+    if(a==='in') setZ(z*1.4); else if(a==='out') setZ(z/1.4); else if(a==='x'||e.target===lb) close();
+  });
+  lb.addEventListener('wheel',function(e){ if(!lb.classList.contains('open'))return; e.preventDefault(); setZ(z*(e.deltaY<0?1.2:1/1.2)); },{passive:false});
+  im.addEventListener('dblclick',function(){ setZ(z>1?1:2.5); });
+  im.addEventListener('pointerdown',function(e){ if(z<=1)return; drag={px:e.clientX,py:e.clientY,x:x,y:y}; lb.classList.add('drag'); im.setPointerCapture(e.pointerId); });
+  im.addEventListener('pointermove',function(e){ if(!drag)return; x=drag.x+e.clientX-drag.px; y=drag.y+e.clientY-drag.py; ap(); });
+  function end(){ drag=null; lb.classList.remove('drag'); }
+  im.addEventListener('pointerup',end); im.addEventListener('pointercancel',end);
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open'))return;
+    if(e.key==='Escape') close(); else if(e.key==='+'||e.key==='=') setZ(z*1.4); else if(e.key==='-') setZ(z/1.4);
+  });
 })();
 </script>
 </body>
